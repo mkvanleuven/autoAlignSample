@@ -1,3 +1,2 @@
-test.py
-piezotest.py
-testData/
+# Put any test scripts or data in a folder called "ignore"
+ignore/

@@ -1,5 +1,5 @@
 '''
-PHOTOMETRY
+Necessary functions to perform basic photometry on camera images
 '''
 
 import numpy as np
@@ -16,16 +16,19 @@ def most_common(lst):
     return max(lst, key=data.get)
 '''
 
-def most_common(lst):
+def most_common(list):
+    '''
+    Returns the most common value from a numpy array. Works with ndarrays
+    '''
     #find unique values in array along with their counts
-    vals, counts = np.unique(lst, return_counts=True)
+    vals, counts = np.unique(list, return_counts=True)
     #find mode
     mode_value = np.argwhere(counts == np.max(counts))
     return vals[mode_value].flatten().min()
 
 def subtractBackground(image):
     '''
-    basic background subtraction, likely unneeded...
+    Basic background subtraction based on the most common pixel value
     '''
     #flat = image.flatten()
     mc = most_common(image)
@@ -33,11 +36,15 @@ def subtractBackground(image):
     return image - mc
 
 def getPeakIntensity(image):
+    '''
+    Gets highest intensity value in the image
+    '''
     max = image.max()
     return max
 
 def getPeakIndex(image):
     '''
+    Gets position of highest intensity value in the image. If multiple exist the average is returned
     '''
     max = getPeakIntensity(image)
     index = np.where(image == max)
@@ -49,6 +56,9 @@ def getPeakIndex(image):
     return avg_pos
 
 def step(image, startIndex, dir, threshold):
+    '''
+    Stepper function to travel from a starting point in a given direction until a threshold condition is reached
+    '''
     dir_len = len(dir)
     if dir_len != 2:
         print(f"Direction list should be length 2, you gave me one of length {dir_len}, what am I supposed to do with this?")
@@ -73,6 +83,9 @@ def step(image, startIndex, dir, threshold):
     return np.array([x, y])
 
 def getBbox(image, frac):
+    '''
+    Gets the bounding box of a spot based on the stepper function
+    '''
     max = getPeakIntensity(image)
     center = getPeakIndex(image)
 
@@ -92,7 +105,7 @@ def getBbox(image, frac):
 
 def getSpotDiameter(bbox):
     '''
-    get diameter of the laser spot
+    Get diameter of the spot based on averaging the two axes of the bounding box
     '''
     lr = bbox[1][0] - bbox[0][0]
     tb = bbox[1][1] - bbox[0][1]
