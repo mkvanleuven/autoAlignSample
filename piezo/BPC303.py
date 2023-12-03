@@ -1,10 +1,10 @@
-import benchtop_piezo_controller as bpc
+import piezo.benchtop_piezo_controller as bpc
 from ctypes import (
     create_string_buffer,
     c_int,
     c_short
 )
-from utils import (
+from piezo.utils import (
     c_word
 )
 from time import sleep

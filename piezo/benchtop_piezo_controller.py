@@ -18,7 +18,7 @@ from ctypes import (
     CFUNCTYPE,
 )
 
-from utils import (
+from piezo.utils import (
     c_word,
     c_dword,
     bind

@@ -3,3 +3,6 @@ archive/
 testData/
 piezotest.py
 test.py
+
+camera/__pycache__/
+piezo/__pycache__/
