@@ -99,24 +99,3 @@ def getSpotDiameter(bbox):
 
     diameter = np.mean([lr, tb])
     return diameter
-'''
-image = np.loadtxt('C:\\Users\\Max\\Desktop\\focus_data\\d11um.csv', delimiter = ',')
-
-image = subtractBackground(image)
-
-bbox = getBbox(image, 0.1)
-print(bbox)
-
-
-time1 = time.time()
-fig, ax = plt.subplots()
-ax.imshow(image)
-poly = patches.Polygon(bbox, color = "red")
-ax.add_patch(poly)
-
-diameter = getSpotDiameter(bbox)
-print(diameter)
-time2 = time.time()
-print(time2 - time1)
-plt.show()
-'''
