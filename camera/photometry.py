@@ -82,13 +82,11 @@ def step(image, startIndex, dir, threshold):
 
     return np.array([x, y])
 
-def getBbox(image, frac):
+def getBbox(image, center, frac):
     '''
     Gets the bounding box of a spot based on the stepper function
     '''
     max = getPeakIntensity(image)
-    center = getPeakIndex(image)
-
     threshold = frac * max
 
     left_bound = step(image, center, [-1, 0], threshold)

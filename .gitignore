@@ -6,3 +6,5 @@ test.py
 
 camera/__pycache__/
 piezo/__pycache__/
+
+main/
