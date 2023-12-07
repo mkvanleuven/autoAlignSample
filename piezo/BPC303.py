@@ -13,7 +13,7 @@ import sys
 
 class BPC303:
     
-    def __init__(self, stage):
+    def __init__(self, stage) -> None:
         if bpc.TLI_BuildDeviceList() == 0:
             num_devs = int(bpc.TLI_GetDeviceListSize())
         receive_buffer = create_string_buffer(bytes(" " * 250, "utf-8"))
@@ -72,7 +72,7 @@ class BPC303:
             print(f'could not find device {stage}')
             raise ValueError('No such device found')
     
-    def zero(self):
+    def zero(self) -> None:
         i = 1
         while i < self._numChannels + 1:
             #print(f'Zeroing channel {i}')
@@ -80,7 +80,7 @@ class BPC303:
             i += 1
         print(f'{i - 1} channels zeroed')
 
-    def close(self):
+    def close(self) -> None:
         bpc.PBC_StopPolling(self.serial)
         bpc.PBC_Close(self.serial)
         # if self.loop_mode == 'closed':
@@ -139,7 +139,7 @@ class BPC303:
     #     else:
     #         print("Couldn't set position: control mode not closed")            
 
-    def set_voltage(self, channel, voltage): #sets voltage as a percentage of max voltage
+    def set_voltage(self, channel, voltage) -> None: #sets voltage as a percentage of max voltage
         bpc.PBC_RequestPositionControlMode(self.serial, channel)
         ControlMode = bpc.PBC_GetPositionControlMode(self.serial, channel)
         pos = c_short(int(self.convert_pc_to_pos(voltage)))
@@ -152,7 +152,7 @@ class BPC303:
         else:
             print("Mode not correct for voltage setting")
             
-    def get_voltage(self, channel):
+    def get_voltage(self, channel) -> float:
         bpc.PBC_RequestPositionControlMode(self.serial, channel)
         ControlMode = bpc.PBC_GetPositionControlMode(self.serial, channel)
         if ControlMode == 1:
@@ -162,7 +162,7 @@ class BPC303:
         else:
             print("Mode not correct for voltage setting")
             
-    def get_maxVoltage(self, channel):
+    def get_maxVoltage(self, channel) -> float:
         
         bpc.PBC_RequestPositionControlMode(self.serial, channel)
         ControlMode = bpc.PBC_GetPositionControlMode(self.serial, channel)
@@ -173,7 +173,7 @@ class BPC303:
         else:
             print("Mode not correct for voltage setting")
             
-    def set_maxVoltage(self, channel, volts):
+    def set_maxVoltage(self, channel, volts) -> None:
         maxi = volts *10
         bpc.PBC_RequestPositionControlMode(self.serial, channel)
         ControlMode = bpc.PBC_GetPositionControlMode(self.serial, channel)
@@ -183,10 +183,10 @@ class BPC303:
         else:
             print("Mode not correct for voltage setting")  
             
-    def convert_pc_to_pos(self, percentage):
+    def convert_pc_to_pos(self, percentage) -> float:
         return percentage / 100 * 32767
      
-    def convert_pos_to_pc(self, pos):
+    def convert_pos_to_pc(self, pos) -> float:
         return pos/32767 * 100
 
     # def set_hub_analogue_input(self, channel):

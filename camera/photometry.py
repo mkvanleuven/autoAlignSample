@@ -16,7 +16,7 @@ def most_common(lst):
     return max(lst, key=data.get)
 '''
 
-def most_common(list):
+def most_common(list) -> float:
     '''
     Returns the most common value from a numpy array. Works with ndarrays
     '''
@@ -26,7 +26,7 @@ def most_common(list):
     mode_value = np.argwhere(counts == np.max(counts))
     return vals[mode_value].flatten().min()
 
-def subtractBackground(image):
+def subtractBackground(image) -> np.ndarray:
     '''
     Basic background subtraction based on the most common pixel value
     '''
@@ -35,14 +35,14 @@ def subtractBackground(image):
 
     return image - mc
 
-def getPeakIntensity(image):
+def getPeakIntensity(image) -> float:
     '''
     Gets highest intensity value in the image
     '''
     max = image.max()
     return max
 
-def getPeakIndex(image):
+def getPeakIndex(image) -> np.array:
     '''
     Gets position of highest intensity value in the image. If multiple exist the average is returned
     '''
@@ -55,7 +55,7 @@ def getPeakIndex(image):
     avg_pos = np.array([x, y])
     return avg_pos
 
-def step(image, startIndex, dir, threshold):
+def step(image, startIndex, dir, threshold) -> np.array:
     '''
     Stepper function to travel from a starting point in a given direction until a threshold condition is reached
     '''
@@ -82,7 +82,7 @@ def step(image, startIndex, dir, threshold):
 
     return np.array([x, y])
 
-def getBbox(image, center, frac):
+def getBbox(image, center, frac) -> np.ndarray:
     '''
     Gets the bounding box of a spot based on the stepper function
     '''
@@ -101,7 +101,7 @@ def getBbox(image, center, frac):
 
     return bbox
 
-def getSpotDiameter(bbox):
+def getSpotDiameter(bbox) -> float:
     '''
     Get diameter of the spot based on averaging the two axes of the bounding box
     '''

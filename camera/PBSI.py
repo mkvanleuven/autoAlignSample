@@ -4,9 +4,10 @@ Teledyne Prime BSI Express camera controls
 
 from pyvcam import pvc 
 from pyvcam.camera import Camera
+import numpy as np
 import matplotlib.pyplot as plt
 
-def createCam():
+def createCam() -> Camera:
     '''
     Initialise and create camera object
     '''
@@ -14,14 +15,14 @@ def createCam():
     camera = next(Camera.detect_camera())
     return camera
 
-def openCam(camera):
+def openCam(camera) -> None:
     '''
     Open camera
     '''
     camera.open()
     return
 
-def generateFrame(camera, exposure_time):
+def generateFrame(camera, exposure_time) -> np.ndarray:
     '''
     Get frame from camera with given exposure time. Returns numpy 2d array
     '''

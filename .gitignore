@@ -1,8 +1,10 @@
 archive/
 
+2023-12-04/
 testData/
 piezotest.py
 test.py
+response.py
 
 camera/__pycache__/
 piezo/__pycache__/
