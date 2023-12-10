@@ -24,6 +24,12 @@ def main():
     INITIALISE PIEZO
     '''
     piezo = bpc.BPC303(SN)
+    num_channels = piezo.getNumChannels()
+    channels = range(1, num_channels + 1)
+
+    '''
+    
+    '''
 
     while True:
         pass
