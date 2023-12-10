@@ -33,3 +33,19 @@ def generateFrame(camera, exposure_time) -> np.ndarray:
 def showFrame(frame):
     plt.imshow(frame)
 '''
+
+def getGain(camera) -> int:
+    '''
+    Get gain value of the camera
+    '''
+    gain = camera.gain
+    return gain
+
+def setGain(camera, gain) -> None:
+    '''
+    Set gain value of the camera
+    HDR = ##
+    Sensitivity = ##
+    '''
+    camera.gain = gain
+    return
