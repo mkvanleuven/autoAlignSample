@@ -22,6 +22,13 @@ def openCam(camera) -> None:
     camera.open()
     return
 
+def closeCam(camera) -> None:
+    '''
+    Close camera
+    '''
+    camera.close()
+    return
+
 def generateFrame(camera, exposure_time) -> np.ndarray:
     '''
     Get frame from camera with given exposure time. Returns numpy 2d array

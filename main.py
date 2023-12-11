@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from time import sleep
+import os
 
 import camera.PBSI as pbsi
 import camera.photometry as phot
@@ -22,6 +23,7 @@ frac = .8
 
 
 def main():
+    os.system('start /max cmd')
     '''
     INITIALISE CAMERA
     '''
@@ -54,6 +56,8 @@ def main():
         if curr_point < frac * set_point:
             for i in channels:
                 dither.correctChannel(piezo, i, dV, num_iter, exposure_ms)
+    
+    pbsi.closeCam(camera)
 
 if __name__ == '__main__':
     main()
