@@ -66,7 +66,7 @@ class BPC303:
                 print(f"Connected to {self._numChannels} channels.")
                 sleep(1)
         
-        self.zero()
+        #self.zero()
             
         if self.serial == 'None':
             print(f'could not find device {stage}')
