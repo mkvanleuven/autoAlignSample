@@ -34,18 +34,29 @@ def showFrame(frame):
     plt.imshow(frame)
 '''
 
-def getGain(camera) -> int:
+def getGain(camera) -> None:
     '''
-    Get gain value of the camera
+    Get camera gain index
     '''
-    gain = camera.gain
-    return gain
+    return camera.gain
 
-def setGain(camera, gain) -> None:
+def setGain(camera, gain_index) -> None:
     '''
-    Set gain value of the camera
-    HDR = ##
-    Sensitivity = ##
+    Set camera gain index
     '''
-    camera.gain = gain
+    camera.gain = gain_index
+    return
+
+def setHDR(camera) -> None:
+    '''
+    Set camera to HDR mode
+    '''
+    setGain(camera, 1)
+    return
+
+def setSensitivity(camera) -> None:
+    '''
+    Set camera to sensitivity mode
+    '''
+    setGain(camera, 2)
     return

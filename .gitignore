@@ -5,6 +5,7 @@ testData/
 piezotest.py
 test.py
 response.py
+testdither.py
 
 camera/__pycache__/
 piezo/__pycache__/

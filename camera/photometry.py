@@ -16,7 +16,7 @@ def most_common(lst):
     return max(lst, key=data.get)
 '''
 
-def most_common(list) -> float:
+def mostCommon(list) -> float:
     '''
     Returns the most common value from a numpy array. Works with ndarrays
     '''
@@ -31,7 +31,7 @@ def subtractBackground(image) -> np.ndarray:
     Basic background subtraction based on the most common pixel value
     '''
     #flat = image.flatten()
-    mc = most_common(image)
+    mc = mostCommon(image)
 
     return image - mc
 
