@@ -63,3 +63,34 @@ def correctChannel(piezo, channel, dV, camera, num_iter, exposure_time) -> None:
     #plt.plot(V, Gaussian(V, *popt))
     plt.show()
     return
+
+def threePointDither(piezo, channel, dV, camera, exposure_time) -> None: # this can definitely be improved using matrices lol, will do that tomorrow
+    V_init = piezo.get_voltage()
+    delta = dV
+
+    x1 = V_init
+    x0 = x1 - delta
+    x2 = x1 + delta
+
+    frame = pbsi.generateFrame(camera, exposure_time)
+    y1 = phot.getPeakIntensity(frame)
+
+    piezo.set_voltage(channel, x0)
+    frame = pbsi.generateFrame(camera, exposure_time)
+    y0 = phot.getPeakIntensity(frame)
+
+    piezo.set_voltage(channel, x2)
+    frame = pbsi.generateFrame(camera, exposure_time)
+    y2 = phot.getPeakIntensity(frame)
+
+    a0 = y0 / (x0 - x1) / (x0 - x2)
+    a1 = y1 / (x1 - x0) / (x1 - x2)
+    a2 = y2 / (x2 - x0) / (x2 - x1)
+
+    if (a0 + a1 + a2) > 0:
+        return
+
+    x_max = 1.5 * x1 - ((a0 * x0 + a1 * x1 + a2 * x2) / (a0 + a1 + a2) / 2)
+    piezo.set_voltage(x_max)
+
+    return
