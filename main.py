@@ -16,12 +16,29 @@ SET VALUES
 '''
 SN = '71281854'
 exposure_ms = 250
-dx = .01
-dV = dx * 5  # 100 * dx / 20
 num_iter = 30 # 2 * num_iter + 1
 sleep_length = 10
 frac = .95
 
+## x
+dx = .01
+dVx = dx * 5  # 100 * dx / 20
+chx = 3
+x = [chx, dVx]
+
+## y
+dy = .01
+dVy = dy * 5
+chy = 2
+y = [chy, dy, dVy]
+
+## z
+dz = 0.01
+dVz = dz * 5
+chz = 1
+z = [chz, dVz]
+
+channels = {'x': x, 'y': y, 'z': z}
 
 def main():
     #os.system('start /max cmd')
@@ -37,39 +54,33 @@ def main():
     '''
     piezo = bpc.BPC303(SN)
     num_channels = piezo._numChannels
-    channels = range(1, num_channels + 1)
 
-    for i in channels:
-        dither.correctChannel(piezo, i, dV, camera, num_iter, exposure_ms)
+    dither.correctChannel(piezo, *channels['z'], camera, num_iter, exposure_ms)
+    dither.correctChannel(piezo, *channels['y'], camera, num_iter, exposure_ms)
+    dither.correctChannel(piezo, *channels['x'], camera, num_iter, exposure_ms)
+    dither.correctChannel(piezo, *channels['z'], camera, num_iter, exposure_ms)
 
     set_frame = pbsi.generateFrame(camera, exposure_ms)
-    #background = phot.mostCommon(set_frame)
-    #set_frame = phot.subtractBackground(set_frame)
     set_point = phot.getPeakIntensity(set_frame)
-    #set_point_spot = phot.getPeakIndex(set_frame)
-    #print(set_point)
-    #plt.imshow(set_frame)
-    #plt.plot(set_point_spot[0], set_point_spot[1], 'rx', ms=2)
-    #plt.show()
-
 
     '''
     DITHER LOOP
     '''
 
     while True:
-        sleep(sleep_length)
+        #  sleep(sleep_length)
         curr_frame = pbsi.generateFrame(camera, exposure_ms)
         curr_point = phot.getPeakIntensity(curr_frame)
         if curr_point < frac * set_point:
             print(f'Signal intensity is currently {curr_point}, below the {100 * frac} threshold from {set_point}.')
-            for i in channels:
-                dither.correctChannel(piezo, i, dV, camera, num_iter, exposure_ms)
+            dither.correctChannel(piezo, *channels['z'], camera, num_iter, exposure_ms)
+            dither.correctChannel(piezo, *channels['y'], camera, num_iter, exposure_ms)
+            dither.correctChannel(piezo, *channels['x'], camera, num_iter, exposure_ms)
+            dither.correctChannel(piezo, *channels['z'], camera, num_iter, exposure_ms)
+
         elif curr_point > set_point:
             set_point = curr_point
             print(f'Signal intensity is currently {curr_point}, above the {100 * frac} threshold from {set_point}.')
-    
-    pbsi.closeCam(camera)
 
 if __name__ == '__main__':
     main()
