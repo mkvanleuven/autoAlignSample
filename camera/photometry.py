@@ -16,6 +16,7 @@ def most_common(lst):
     return max(lst, key=data.get)
 '''
 
+
 def mostCommon(list) -> float:
     '''
     Returns the most common value from a numpy array. Works with ndarrays
@@ -26,6 +27,7 @@ def mostCommon(list) -> float:
     mode_value = np.argwhere(counts == np.max(counts))
     return vals[mode_value].flatten().min()
 
+
 def subtractBackground(image) -> np.ndarray:
     '''
     Basic background subtraction based on the most common pixel value
@@ -35,12 +37,14 @@ def subtractBackground(image) -> np.ndarray:
 
     return image - mc
 
+
 def getPeakIntensity(image) -> float:
     '''
     Gets highest intensity value in the image
     '''
     max = image.max()
     return max
+
 
 def getPeakIndex(image) -> np.array:
     '''
@@ -55,15 +59,17 @@ def getPeakIndex(image) -> np.array:
     avg_pos = np.array([x, y])
     return avg_pos
 
+
 def step(image, startIndex, dir, threshold) -> np.array:
     '''
     Stepper function to travel from a starting point in a given direction until a threshold condition is reached
     '''
     dir_len = len(dir)
     if dir_len != 2:
-        print(f"Direction list should be length 2, you gave me one of length {dir_len}, what am I supposed to do with this?")
+        print(
+            f"Direction list should be length 2, you gave me one of length {dir_len}, what am I supposed to do with this?")
         return
-    
+
     x = startIndex[0]
     y = startIndex[1]
 
@@ -81,6 +87,7 @@ def step(image, startIndex, dir, threshold) -> np.array:
         y += dy
 
     return np.array([x, y])
+
 
 def getBbox(image, center, frac) -> np.ndarray:
     '''
@@ -100,6 +107,7 @@ def getBbox(image, center, frac) -> np.ndarray:
     bbox = np.array([topleft_bound, bottomright_bound])
 
     return bbox
+
 
 def getSpotDiameter(bbox) -> float:
     '''

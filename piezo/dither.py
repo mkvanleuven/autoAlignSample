@@ -52,12 +52,6 @@ def fitGaussian(V, I):  # -> tuple[np.array, np.ndarray]
 def correctChannel(piezo, channel, dV, camera, num_iter, exposure_time) -> None:
     V, I = dither(piezo, channel, dV, camera, num_iter, exposure_time)
     plt.plot(V, I)
-    '''
-    popt, pcov = fitGaussian(V, I)
-    p_sigma = np.sqrt(np.diag(pcov))
-    uopt = popt[-1]
-    u_sigma = pcov[-1]
-    '''
     I_max = max(I)
     I_max_index = I.index(I_max)
     uopt = V[I_max_index]
@@ -95,46 +89,7 @@ def threePointDither(piezo, channel, dV, camera,
     if (a0 + a1 + a2) > 0:
         return
 
-    x_max = 1.5 * x1 - (a0 * x0 + a1 * x1 + a2 * x2) / (a0 + a1 + a2) / 2
+    x_max = 1.5 * x1 - ((a0 * x0 + a1 * x1 + a2 * x2) / (a0 + a1 + a2) / 2)
     piezo.set_voltage(x_max)
 
     return
-
-def tpdMat(piezo, channel, dV, camera, exposure_time) -> None:
-    #  this exists purely as a test
-    #  likely slower to invert xx matrix than it is to just calculate it based on lagrange interpolation
-
-    V_init = piezo.get_voltage()
-    delta = dV
-    x1 = V_init
-    x0 = x1 - delta
-    x2 = x1 + delta
-
-    frame = pbsi.generateFrame(camera, exposure_time)
-    y1 = phot.getPeakIntensity(frame)
-
-    piezo.set_voltage(channel, x0)
-    frame = pbsi.generateFrame(camera, exposure_time)
-    y0 = phot.getPeakIntensity(frame)
-
-    piezo.set_voltage(channel, x2)
-    frame = pbsi.generateFrame(camera, exposure_time)
-    y2 = phot.getPeakIntensity(frame)
-
-    xx = np.array([
-        [x0 * x0, x0, 1],
-        [x1 * x1, x1, 1],
-        [x2 * x2, x2, 1]
-    ])
-
-    yy = np.array([y0, y1, y2])
-    x_i = np.linalg.inv(xx)
-    popt = x_i * yy
-
-    a = popt[0]
-    b = popt[1]
-
-    x_max = - b / a / 2
-    piezo.set_voltage(x_max)
-
-    return None

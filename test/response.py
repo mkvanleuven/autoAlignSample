@@ -14,7 +14,7 @@ dz = []
 iz = []
 
 for folder in dir_list:
-    if 'x' not in folder and 'y' not in folder:
+    if 'x' not in folder and 'y' not in folder and '931' not in folder:
         dir_img = str(dir) + '\\' + str(folder) + '\\' + str(folder) + '_MMStack_Default.ome.tif'
         img = Image.open(dir_img)
         img = np.array(img)
@@ -24,12 +24,13 @@ for folder in dir_list:
         dz.append(float(split_folder))
         iz.append(max)
 
-plt.figure('z')
+plt.figure('z', dpi=250)
 plt.scatter(dz, iz)
 plt.xlabel('dz (um)')
 plt.ylabel('intensity')
-plt.title('intensity wrt change in z')
+#plt.title('intensity wrt change in z')
 plt.axvline(0, color = 'k', linestyle = '--')
+plt.grid()
 
 dy = []
 iy = []
@@ -45,12 +46,13 @@ for folder in dir_list:
         dy.append(float(split_folder))
         iy.append(max)
 
-plt.figure('y')
+plt.figure('y', dpi=250)
 plt.scatter(dy, iy)
 plt.xlabel('dy (um)')
 plt.ylabel('intensity')
-plt.title('intensity wrt change in y')
+#plt.title('intensity wrt change in y')
 plt.axvline(0, color = 'k', linestyle = '--')
+plt.grid()
 
 dx = []
 ix = []
@@ -66,11 +68,12 @@ for folder in dir_list:
         dx.append(float(split_folder))
         ix.append(max)
 
-plt.figure('x')
+plt.figure('x', dpi=250)
 plt.scatter(dx, ix)
 plt.xlabel('dx (um)')
 plt.ylabel('intensity')
-plt.title('intensity wrt change in x')
+#plt.title('intensity wrt change in x')
 plt.axvline(0, color = 'k', linestyle = '--')
+plt.grid()
 
 plt.show()

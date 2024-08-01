@@ -26,7 +26,7 @@ class BPC303:
         self.serial = 'None'
         for device in serial_nos:
             cur_serial_no = create_string_buffer(bytes(device, "utf-8"))
-            # print(cur_serial_no.value.decode())
+            # print(cur_serial_no.value.decode()) ________
             if cur_serial_no.value.decode() == stage: 
                 self.serial = cur_serial_no
     #           print(self.serial.value.decode("utf-8").strip().split(','))
