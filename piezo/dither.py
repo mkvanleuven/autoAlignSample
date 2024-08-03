@@ -58,7 +58,7 @@ def correctChannel(piezo, channel, dV, camera, num_iter, exposure_time) -> None:
     piezo.set_voltage(channel, uopt)
     print(f'Channel {channel} has been moved to position {uopt}')  # with error {u_sigma}.')
     # plt.plot(V, Gaussian(V, *popt))
-    plt.show()
+    # plt.show()
     return
 
 

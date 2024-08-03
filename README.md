@@ -281,17 +281,153 @@ Returns:
 </pre>
 
 ### BPC303.BPC303.get_voltage
-`BPC303.BPC303.get_voltage(channel, voltage)`
+`BPC303.BPC303.get_voltage(channel)`
 
 Gets voltage of specified channel on the piezo controller.
 <pre>
 Parameters:
     channel : int
         Channel value (1, 2, 3).
-
 </pre>
 <pre>
 Returns:
-    voltage : float
+    out : float
         Voltage as a percentage of the maximum value.
+</pre>
+
+### BPC303.BPC303.get_maxVoltage
+`BPC303.BPC303.get_maxVoltage(channel)`
+
+Gets maximum allowed voltage of specified channel on the piezo controller.
+<pre>
+Parameters:
+    channel : int
+        Channel value (1, 2, 3).
+</pre>
+<pre>
+Returns:
+    out : float
+        Maximum allowed voltage of channel.
+</pre>
+
+### BPC303.BPC303.set_maxVoltage
+`BPC303.BPC303.set_maxVoltage(channel, volts)`
+
+Sets maximum allowed voltage of specified channel on the piezo controller.
+<pre>
+Parameters:
+    channel : int
+        Channel value (1, 2, 3).
+</pre>
+<pre>
+Returns:
+    None
+</pre>
+
+### BPC303.BPC303.convert_pos_to_pc
+`BPC303.BPC303.convert_pos_to_pc(pos)`
+
+Converts position of piezo to percentage of maximum value. Inverse function of `convert_pc_to_pos`.
+<pre>
+Parameters:
+    pos : float
+        Value of absolute piezo position.
+</pre>
+<pre>
+Returns:
+    out : float
+        Piezo position as a percentage of the maximum value.
+</pre>
+
+### BPC303.BPC303.convert_pc_to_pos
+`BPC303.BPC303.convert_pc_to_pos(percentage)`
+
+Converts position of piezo to percentage of maximum value. Inverse function of `convert_pos_to_pc`.
+<pre>
+Parameters:
+    percentage : float
+        Piezo position as a percentage of the maximum value.
+</pre>
+<pre>
+Returns:
+    out : float
+        Value of absolute piezo position.
+</pre>
+
+### dither.dither
+`dither.dither(piezo, channel, dV, camera, num_iter, exposure_time)`
+
+Main dithering function. Moves the piezo channel either way by `dV * num_iter`.
+<pre>
+Parameters:
+    piezo : BPC303.BPC303
+        Piezo object.
+    channel : int
+        Channel index to dither.
+    dV : float
+        Voltage increment between dither positions.
+    camera : camera.cam
+        Camera object.
+    num_iter : int
+        How many intensity measurements to make either side of the original position.
+    exposure_time : float
+        Exposure time per measurement.
+</pre>
+<pre>
+Returns:
+    V_array : array
+        Array of voltage values where intensity measurements taken.
+    I_array : array
+        Array of intensity values of each measurement.
+</pre>
+
+### dither.correctChannel
+`dither.correctChannel(piezo, channel, dV, camera, num_iter, exposure_time)`
+
+Uses `dither.dither` to correct the position of the sample based on what voltage value gives the highest intensity 
+reading.
+
+<pre>
+Parameters:
+    piezo : BPC303.BPC303
+        Piezo object.
+    channel : int
+        Channel index to dither.
+    dV : float
+        Voltage increment between dither positions.
+    camera : camera.cam
+        Camera object.
+    num_iter : int
+        How many intensity measurements to make either side of the original position.
+    exposure_time : float
+        Exposure time per measurement.
+</pre>
+<pre>
+Returns:
+    None
+</pre>
+
+### dither.threePointDither
+`dither.threePointDither(piezo, channel, dV, camera, exposure_time)`
+
+Uses Lagrange interpolation to estimate the position of highest intensity with a quadratic approximation to the 
+Gaussian profile. This method only uses three intensity measurements, hence it is much faster but less accurate than
+`dither.correctChannel`.
+
+<pre>
+Parameters:
+    piezo : BPC303.BPC303
+        Piezo object.
+    channel : int
+        Channel index to dither.
+    dV : float
+        Voltage increment between dither positions.
+    camera : camera.cam
+        Camera object.
+    exposure_time : float
+        Exposure time per measurement.
+</pre>
+<pre>
+Returns:
+    None
 </pre>
