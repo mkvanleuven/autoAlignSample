@@ -5,6 +5,32 @@ for the BPC303 benchtop piezo controller based on [ekarademir's thorlabs_kinesis
 used by the Imperial College London EXSS group for increasing integration time in temperature measurements of plasmonic 
 nanostructures.
 
+# Installation
+To be able to run this code, some dependancies are required. They are not difficult to install, but I will outline here 
+how to do so. If you prefer a video tutorial, check out [this video](https://youtu.be/oFDtj0EP-r8) I made showing how to download the 
+dependencies.
+
+We begin with Thorlabs' Kinesis software, which is required to control the piezo stage. The installer can be downloaded 
+[here](https://www.thorlabs.com/software_pages/ViewSoftwarePage.cfm?Code=Motion_Control&viewtab=0). Do not modify the default installation location, if you do, you will have to change it in 
+`benchtop_stepper_motor.py` and `benchtop_piezo_controller.py` yourself. The code has only been tested using Kinesis 
+64-Bit Software for 64-Bit Windows, so I cannot promise support for any 32-Bit software. No SDK is required.
+
+Secondly, to be able to use the camera, PVCAM drivers are required. I cannot send the download link directly, however it 
+is possible to submit a form to get the `/download` link from [here](https://www.photometrics.com/support/download/pvcam/). I do not believe the SDK is required to use 
+this code. 
+
+Before the Python wrapper can be installed, Visual Studio C++ Build Tools is required. To do this, download 
+and install Visual Studio from [here](https://visualstudio.microsoft.com/), I recommend the Community edition, however it will not matter. This should 
+bring you into the Visual Studio Installer, where you scroll down to the "Desktop & Mobile" tab. Ensure "Desktop 
+development with C++" is selected, and install.
+
+The final step is to install the Python wrapper for PVCAM, which can be downloaded [here](https://github.com/Photometrics/PyVCAM). Download the GitHub repo 
+and unzip it. Use a terminal to navigate to the installed folder, and run the command `python setup.py install`. This 
+assumes you have Python installed, but I doubt you would be using this code if that were not the case.
+
+If you have any issues, feel free to contact me and I may try to assist, but I cannot promise anything. Good luck with 
+the code, thanks for downloading!
+# Docs
 ## camera/
 ### PBSI.createCam
 `PBSI.createCam()`
