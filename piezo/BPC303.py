@@ -19,10 +19,7 @@ class BPC303:
         receive_buffer = create_string_buffer(bytes(" " * 250, "utf-8"))
         buffer_size = bpc.c_dword(250)
         bpc.TLI_GetDeviceListByTypeExt(receive_buffer, buffer_size, c_int(71))
-
         serial_nos = receive_buffer.value.decode("utf-8").strip().split(',')
-        
-        #self.serial = create_string_buffer(bytes(serial_nos[stage], "utf-8"))
         self.serial = 'None'
         for device in serial_nos:
             cur_serial_no = create_string_buffer(bytes(device, "utf-8"))
@@ -79,67 +76,14 @@ class BPC303:
             self.set_voltage(i, 0)
             i += 1
         print(f'{i - 1} channels zeroed')
+        return
 
     def close(self) -> None:
         bpc.PBC_StopPolling(self.serial)
         bpc.PBC_Close(self.serial)
-        # if self.loop_mode == 'closed':
-        #     self.Strain_G.close()
-        
-    # def set_loop_mode(self, loop_mode):
-    #     sleep(1)
-    #     if loop_mode == "open":
-    #         if kpz.PCC_SetPositionControlMode(self.serial, 1) == 0:
-    #             sleep(1)
-    #             print("Control mode set: Open")
-    #             self.loop_mode = 'open'
-    #             return 0
-    #     elif loop_mode == "closed":
-    #         if Strain_gauge == 'None':
-    #             print('No Strain gauge serial number entered')
-    #             return 1
-    #         self.set_hub_analogue_input(self.hub_channel)
-    #         sleep(1)
-    #         self.Strain_G = ksg.KSG101(Strain_gauge)
-    #         sleep(1)
-    #         self.Strain_G.set_hub_analogue_output(self.hub_channel)
-    #         sleep(1)
-    #         if kpz.PCC_SetPositionControlMode(self.serial, 4) == 0:
-    #             sleep(1)
-    #             print("Control mode set: Closed")
-    #             self.loop_mode = 'closed'
-    #             return 0
-    #     else:
-    #         print("Loop mode not recognised")
-    #         return 1
-            
-    # def set_position(self, position): # Sets position in closed loop mode
-    #     pos = int(position * 653.55)
-    #     kpz.PCC_RequestPositionControlMode(self.serial)
-    #     ControlMode = kpz.PCC_GetPositionControlMode(self.serial)
-    #     if ControlMode == 2:
-    #         if kpz.PCC_SetPosition(self.serial, c_word(pos)) == 0:
-    #             #sleep(1)
-    #             #print(f"Position set to {position}")
-    #             pass
-    #         else:
-    #             print(f"failed to set position")
-    #     else:
-    #         print("Couldn't set position: control mode not closed")
-        
-    # def get_position(self):
-    #     #sleep(1)
-    #     kpz.PCC_RequestPositionControlMode(self.serial)
-    #     ControlMode = kpz.PCC_GetPositionControlMode(self.serial)
-    #     #print(f'control mode:{ControlMode}')
-    #     if ControlMode == 2:
-    #         pos = kpz.PCC_GetPosition(self.serial)
-    #         pos_ksg = self.Strain_G.get_reading()
-    #         return pos_ksg #/327.67
-    #     else:
-    #         print("Couldn't set position: control mode not closed")            
+        return
 
-    def set_voltage(self, channel, voltage) -> None: #sets voltage as a percentage of max voltage
+    def set_voltage(self, channel, voltage) -> None:
         bpc.PBC_RequestPositionControlMode(self.serial, channel)
         ControlMode = bpc.PBC_GetPositionControlMode(self.serial, channel)
         pos = c_short(int(self.convert_pc_to_pos(voltage)))
@@ -151,6 +95,7 @@ class BPC303:
                 print("failed to set voltage")
         else:
             print("Mode not correct for voltage setting")
+        return
             
     def get_voltage(self, channel) -> float:
         bpc.PBC_RequestPositionControlMode(self.serial, channel)
@@ -158,20 +103,22 @@ class BPC303:
         if ControlMode == 1:
             bpc.PBC_RequestOutputVoltage(self.serial, channel)
             pos = bpc.PBC_GetOutputVoltage(self.serial, channel)
-            return self.convert_pos_to_pc(pos)
+            out = self.convert_pos_to_pc(pos)
         else:
             print("Mode not correct for voltage setting")
+            out = .0
+        return out
             
     def get_maxVoltage(self, channel) -> float:
-        
         bpc.PBC_RequestPositionControlMode(self.serial, channel)
         ControlMode = bpc.PBC_GetPositionControlMode(self.serial, channel)
         if ControlMode == 1:
             bpc.PBC_RequestMaxOutputVoltage(self.serial, channel)
-            pos = bpc.PBC_GetMaxOutputVoltage(self.serial, channel)
-            return pos
+            out = bpc.PBC_GetMaxOutputVoltage(self.serial, channel)
         else:
             print("Mode not correct for voltage setting")
+            out = .0
+        return out
             
     def set_maxVoltage(self, channel, volts) -> None:
         maxi = volts *10
@@ -181,26 +128,13 @@ class BPC303:
             if maxi == 750:
                 bpc.PBC_SetMaxOutputVoltage(self.serial, channel, maxi)
         else:
-            print("Mode not correct for voltage setting")  
+            print("Mode not correct for voltage setting")
+        return
             
     def convert_pc_to_pos(self, percentage) -> float:
-        return percentage / 100 * 32767
+        out = percentage / 100 * 32767
+        return out
      
     def convert_pos_to_pc(self, pos) -> float:
-        return pos/32767 * 100
-
-    # def set_hub_analogue_input(self, channel):
-    #     self.hub_channel = channel
-    #     if channel == 1:
-    #         kpz.PCC_SetHubAnalogInput(self.serial,kpz.AnalogueCh1)
-    #     elif channel == 2:
-    #         if kpz.PCC_SetHubAnalogInput(self.serial,kpz.AnalogueCh2)== 0:
-    #             print("Hub channel set to 2")
-    #     elif channel == 3:
-    #         kpz.PCC_SetHubAnalogInput(self.serial,kpz.ExtSignalSMA)
-            
-# def start_sim():
-#     kpz.TLI_InitializeSimulations()
-    
-# def stop_sim():
-#     kpz.TLI_UninitializeSimulations()
+        out = pos/32767 * 100
+        return out
